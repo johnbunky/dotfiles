@@ -23,19 +23,9 @@ if [ -s "$DOTFILES_DIR/pacman/aur-pkglist.txt" ]; then
     yay -S --needed - < "$DOTFILES_DIR/pacman/aur-pkglist.txt"
 fi
 
-echo "==> Linking fish config"
-mkdir -p ~/.config/fish
-cp "$DOTFILES_DIR/fish/config.fish" ~/.config/fish/config.fish
-
-echo "==> Linking Hyprland config"
-mkdir -p ~/.config/hypr
-cp "$DOTFILES_DIR/hypr/hyprland.conf" ~/.config/hypr/hyprland.conf
-
-if [ -f "$DOTFILES_DIR/kitty/kitty.conf" ]; then
-    echo "==> Linking kitty config"
-    mkdir -p ~/.config/kitty
-    cp "$DOTFILES_DIR/kitty/kitty.conf" ~/.config/kitty/kitty.conf
-fi
+echo "==> Symlinking configs (fish, hyprland, kitty)"
+chmod +x "$DOTFILES_DIR/scripts/link.sh"
+"$DOTFILES_DIR/scripts/link.sh"
 
 echo "==> Applying ollama iGPU override (Vulkan offload for Intel iGPUs)"
 sudo mkdir -p /etc/systemd/system/ollama.service.d
@@ -45,7 +35,31 @@ sudo systemctl daemon-reload
 echo "==> Running post-install tuning (TLP, thermald, power-profiles-daemon mask)"
 bash "$DOTFILES_DIR/scripts/post-install.sh"
 
+echo "==> Cloning nvim config"
+if [ ! -d "$HOME/.config/nvim" ]; then
+    git clone git@github.com:johnbunky/nvimTermuxJavaIDE.git "$HOME/.config/nvim"
+else
+    echo "    ~/.config/nvim already exists, skipping clone"
+fi
+
+echo "==> Cloning terminal_jk / terminal_ai"
+if [ ! -d "$HOME/terminal_jk" ]; then
+    git clone git@github.com:johnbunky/terminal_jk.git "$HOME/terminal_jk"
+else
+    echo "    ~/terminal_jk already exists, skipping clone"
+fi
+
+echo "==> Restoring global npm packages"
+if [ -s "$DOTFILES_DIR/npm/global-packages.txt" ]; then
+    mkdir -p "$HOME/.npm-global"
+    npm config set prefix "$HOME/.npm-global"
+    xargs npm install -g < "$DOTFILES_DIR/npm/global-packages.txt"
+fi
+
 echo "==> Setting fish as default shell"
 chsh -s /usr/bin/fish
+
+echo "==> Reminder: create ~/.config/terminal_ai/keys.env manually (see README — secrets are never stored in this repo)"
+echo "==> Reminder: run 'ssh-keygen' and add the new public key to GitHub manually"
 
 echo "==> Done. Reboot recommended."
