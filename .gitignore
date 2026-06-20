@@ -1,0 +1,22 @@
+# OS / editor cruft
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Backups created by link.sh
+.dotfiles-backup-*/
+
+# Don't accidentally commit secrets if .env-style files ever land here
+*.env
+*secret*
+*.key
+*.pem
+
+# SSH private keys (no extension, so explicit patterns needed)
+id_rsa
+id_ed25519
+id_ecdsa
+.ssh/
+*_token
+*_api_key

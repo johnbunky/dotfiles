@@ -27,6 +27,31 @@ chmod +x install.sh scripts/post-install.sh
   via D-Bus and silently breaks TLP startup
 - Package lists for `pacman -S` and `yay -S` to restore the full environment
 
+## Daily workflow
+
+Configs (`fish/config.fish`, `hypr/hyprland.conf`, etc.) are **symlinked** from `~/.config/...`
+into this repo via `scripts/link.sh`. Editing the file in either location edits the same
+underlying file — there's no copy step. Commit changes normally whenever you want to snapshot:
+
+```bash
+cd ~/dotfiles
+git add .
+git commit -m "tweak fish prompt"
+git push
+```
+
+Package lists (`pacman/pkglist.txt`, `pacman/aur-pkglist.txt`) are **not** symlinked — they're
+a snapshot of installed packages and don't update themselves. Run `scripts/sync.sh` after any
+`pacman -S` / `yay -S` / removal session to regenerate them; it shows a diff and asks before
+committing+pushing:
+
+```bash
+~/dotfiles/scripts/sync.sh
+```
+
+Rule of thumb: edit configs anytime, commit anytime. Run `sync.sh` after install sessions, not
+on every commit.
+
 ## Known gotchas (learned the hard way)
 
 - `ollama` (plain) ships CPU-only backends on Arch — use `ollama-vulkan` from extra repo instead
