@@ -26,6 +26,11 @@ window#waybar {
     background-color: #3b4252;
 }
 
+#workspaces button.active {
+    color: #88c0d0;
+    border-bottom: 2px solid #88c0d0;
+}
+
 #window {
     color: #81a1c1;
     font-style: italic;
