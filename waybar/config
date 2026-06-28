@@ -1,0 +1,95 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 32,
+    "spacing": 4,
+    "modules-left": [
+        "sway/workspaces"
+    ],
+    "modules-center": [
+        "sway/window"
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "battery",
+        "clock",
+        "tray",
+        "custom/power"
+    ],
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{name}"
+    },
+    "sway/window": {
+        "max-length": 60,
+        "format": "\u25b8 {}"
+    },
+    "clock": {
+        "format": " {:%H:%M}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#88c0d0'><b>{}</b></span>",
+                "days": "<span color='#d8dee9'>{}</span>",
+                "weekdays": "<span color='#81a1c1'><b>{}</b></span>",
+                "today": "<span color='#a3be8c'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "\u26a1 {capacity}%",
+        "format-icons": [
+            "\u2581",
+            "\u2583",
+            "\u2585",
+            "\u2587",
+            "\u2588"
+        ],
+        "on-click": "/home/you/.local/bin/battery-mode.sh"
+    },
+    "network": {
+        "format-wifi": "\udb82\udd28",
+        "format-ethernet": "\udb80\ude00",
+        "format-disconnected": "\u26a0",
+        "tooltip-format-wifi": "{essid} {signalStrength}%",
+        "tooltip-format-ethernet": "{ifname}: {ipaddr}",
+        "tooltip-format-disconnected": "disconnected"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "\udb81\udf5f muted",
+        "format-icons": {
+            "default": [
+                "\udb81\udd7f",
+                "\udb81\udd80",
+                "\udb81\udd7e"
+            ]
+        },
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "tooltip": false
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "󰂲",
+        "format-connected": "󰂱 {num_connections}",
+        "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "on-click": "/home/you/.local/bin/bt-menu.sh"
+    },
+    "tray": {
+        "spacing": 8
+    },
+    "custom/power": {
+        "format": "\u23fb",
+        "on-click": "/home/you/.local/bin/powermenu.sh",
+        "tooltip": false
+    }
+}
